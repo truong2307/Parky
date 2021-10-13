@@ -33,7 +33,7 @@ namespace ParkyAPI.Repository
             return _db.NationalParks.FirstOrDefault(c => c.Id == nationalParkId);
         }
 
-        public ICollection<NationalPark> GetNationParks()
+        public ICollection<NationalPark> GetNationalParks()
         {
             return _db.NationalParks.OrderBy(c => c.Name).ToList();
         }
