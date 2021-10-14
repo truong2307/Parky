@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ParkyAPI.Models.Dtos
 {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class NationalParkDto
     {
         public int Id { get; set; }
@@ -16,4 +17,6 @@ namespace ParkyAPI.Models.Dtos
         public DateTime Created { get; set; }
         public DateTime Established { get; set; }
     }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+
 }

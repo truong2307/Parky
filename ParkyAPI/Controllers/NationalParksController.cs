@@ -24,7 +24,10 @@ namespace ParkyAPI.Controllers
             _npRepo = npRepo;
             _mapper = mapper;
         }
-
+        /// <summary>
+        /// Get list national park
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetNationalParks()
         {
@@ -37,7 +40,11 @@ namespace ParkyAPI.Controllers
             }
             return Ok(npListDto);
         }
-
+        /// <summary>
+        /// Get nationalpark with id
+        /// </summary>
+        /// <param name="nationalParkId"> The id of the national park</param>
+        /// <returns></returns>
         [HttpGet("{nationalParkId}", Name = "GetNationalPark")]
         public IActionResult GetNationalPark(int nationalParkId)
         {
@@ -49,7 +56,11 @@ namespace ParkyAPI.Controllers
             var nationalParkDto = _mapper.Map<NationalParkDto>(nationalParkInDb);
             return Ok(nationalParkDto);
         }
-
+        /// <summary>
+        /// Create National Park
+        /// </summary>
+        /// <param name="nationalParkNew"> Obj request of the national park</param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult CreateNationalPark([FromBody] NationalParkDto nationalParkNew)
         {
@@ -64,16 +75,16 @@ namespace ParkyAPI.Controllers
                 return StatusCode(404, ModelState);
             }
 
-            var nationParkToDb = _mapper.Map<NationalPark>(nationalParkNew);
-            if (!_npRepo.CreateNationalPark(nationParkToDb))
+            var nationalParkToDb = _mapper.Map<NationalPark>(nationalParkNew);
+            if (!_npRepo.CreateNationalPark(nationalParkToDb))
             {
                 ModelState
-                    .AddModelError("", $"Something went wrong when saving the record {nationParkToDb.Name} ");
+                    .AddModelError("", $"Something went wrong when saving the record {nationalParkToDb.Name} ");
                 return StatusCode(500, ModelState);
             }
 
             return CreatedAtRoute("GetNationalPark"
-                , new { nationalParkId = nationParkToDb.Id}, nationParkToDb);
+                , new { nationalParkId = nationalParkToDb.Id}, nationalParkToDb);
         }
 
         [HttpPatch("{nationalParkId}", Name = "UpdateNationalPark")]

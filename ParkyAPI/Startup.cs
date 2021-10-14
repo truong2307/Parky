@@ -14,7 +14,9 @@ using ParkyAPI.Repository;
 using ParkyAPI.Repository.IRepository;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace ParkyAPI
@@ -36,7 +38,13 @@ namespace ParkyAPI
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ParkyAPI", Version = "v1" });
+
+                var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
+
+                c.IncludeXmlComments(cmlCommentsFullPath);
             });
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
