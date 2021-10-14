@@ -57,6 +57,11 @@ namespace ParkyAPI.Repository
 
         public bool UpdateTrail(Trail trailUpdate)
         {
+            var trailInDb = _db.Trails.FirstOrDefault(c => c.Id == trailUpdate.Id);
+            if (trailInDb == null)
+            {
+                return false;
+            }
             _db.Trails.Update(trailUpdate);
             return Save();
         }

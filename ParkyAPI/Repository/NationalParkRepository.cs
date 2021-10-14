@@ -53,6 +53,11 @@ namespace ParkyAPI.Repository
 
         public bool UpdateNationalPark(NationalPark nationalPark)
         {
+            var nationalParkInDb = _db.NationalParks.FirstOrDefault(c => c.Id == nationalPark.Id);
+            if (nationalParkInDb == null)
+            {
+                return false;
+            }
             _db.NationalParks.Update(nationalPark);
             return Save();
         }
