@@ -75,5 +75,25 @@ namespace ParkyAPI.Controllers
             return CreatedAtRoute("GetNationalPark"
                 , new { nationalParkId = nationParkToDb.Id}, nationParkToDb);
         }
+
+        [HttpPatch("{nationalParkId}", Name = "UpdateNationalPark")]
+        public IActionResult UpdateNationalPark(int nationalParkId
+            , [FromBody] NationalParkDto nationalParkUpdate)
+        {
+            if (nationalParkUpdate == null || nationalParkUpdate.Id != nationalParkId)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var nationalParkToDB = _mapper.Map<NationalPark>(nationalParkUpdate);
+            if (!_npRepo.UpdateNationalPark(nationalParkToDB))
+            {
+                ModelState
+                    .AddModelError("", $"Something went wrong when update the record {nationalParkToDB.Name} ");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }
