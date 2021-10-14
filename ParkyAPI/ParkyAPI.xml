@@ -17,5 +17,12 @@
             <param name="nationalParkId"> The id of the national park</param>
             <returns></returns>
         </member>
+        <member name="M:ParkyAPI.Controllers.NationalParksController.CreateNationalPark(ParkyAPI.Models.Dtos.NationalParkDto)">
+            <summary>
+            Create National Park
+            </summary>
+            <param name="nationalParkNew"> Obj request of the national park</param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
