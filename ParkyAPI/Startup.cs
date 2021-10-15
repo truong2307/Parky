@@ -35,13 +35,30 @@ namespace ParkyAPI
         {
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo 
+                options.SwaggerDoc("NationalParkAPI", new OpenApiInfo() 
                 { 
-                    Title = "ParkyAPI",
+                    Title = "Parky API (NationalPark)",
                     Version = "v1",
-                    Description ="Parky API",
+                    Description ="Parky API NP",
+                    Contact = new Microsoft.OpenApi.Models.OpenApiContact()
+                    {
+                        Email = "toiiuvn013@gmail.com",
+                        Name = "Truong 10 ngon",
+                    },
+                    License = new Microsoft.OpenApi.Models.OpenApiLicense()
+                    {
+                        Name = "MIT License",
+                        Url = new Uri("https://en.wikipedia.org/wiki/MIT_License")
+                    }
+                });
+
+                options.SwaggerDoc("TrailsAPI", new OpenApiInfo()
+                {
+                    Title = "Parky API (Trails)",
+                    Version = "v1",
+                    Description = "Parky API Trails",
                     Contact = new Microsoft.OpenApi.Models.OpenApiContact()
                     {
                         Email = "toiiuvn013@gmail.com",
@@ -57,7 +74,7 @@ namespace ParkyAPI
                 var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
 
-                c.IncludeXmlComments(cmlCommentsFullPath);
+                options.IncludeXmlComments(cmlCommentsFullPath);
             });
             
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -76,7 +93,10 @@ namespace ParkyAPI
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ParkyAPI v1"));
+                app.UseSwaggerUI(options => {
+                    options.SwaggerEndpoint("/swagger/NationalParkAPI/swagger.json", "Parky API NP");
+                    options.SwaggerEndpoint("/swagger/TrailsAPI/swagger.json", "Parky API Trails");
+                    });
             }
 
             app.UseHttpsRedirection();
