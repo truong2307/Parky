@@ -29,7 +29,7 @@ namespace ParkyAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<NationalParkDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<TrailDto>))]
         public IActionResult GetTrails()
         {
             var trailInDb = _trailRepo.GetTrails();
@@ -49,7 +49,7 @@ namespace ParkyAPI.Controllers
         /// <param name="trailId">the id of trail</param>
         /// <returns></returns>
         [HttpGet("{trailId}", Name = "GetTrail")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(NationalParkDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TrailDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
         public IActionResult GetTrail (int trailId)
@@ -70,10 +70,10 @@ namespace ParkyAPI.Controllers
         /// <param name="trailNew">object trailnew request</param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(NationalParkDto))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TrailDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult CreateTrail([FromBody] TrailDto trailNew)
+        public IActionResult CreateTrail([FromBody] TrailCreateDto trailNew)
         {
             if (trailNew == null)
             {
@@ -101,7 +101,7 @@ namespace ParkyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult UpdateTrail (int trailId,[FromBody] TrailDto trailUpdate)
+        public IActionResult UpdateTrail (int trailId,[FromBody] TrailUpdateDto trailUpdate)
         {
             if (trailUpdate == null || trailId != trailUpdate.Id)
             {

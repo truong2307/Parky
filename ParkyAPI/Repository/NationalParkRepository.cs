@@ -58,7 +58,12 @@ namespace ParkyAPI.Repository
             {
                 return false;
             }
-            _db.NationalParks.Update(nationalPark);
+
+            nationalParkInDb.Name = nationalPark.Name;
+            nationalParkInDb.State = nationalPark.State;
+            nationalParkInDb.Created = nationalPark.Created;
+            nationalParkInDb.Established = nationalPark.Established;
+
             return Save();
         }
         public bool Save()
