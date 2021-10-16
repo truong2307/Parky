@@ -24,6 +24,12 @@
             <param name="nationalParkNew"> Obj request of the national park</param>
             <returns></returns>
         </member>
+        <member name="M:ParkyAPI.Controllers.NationalParksV2Controller.GetNationalParks">
+            <summary>
+            Get list national park
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:ParkyAPI.Controllers.TrailController.GetTrails">
             <summary>
             Get all trail

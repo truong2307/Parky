@@ -12,9 +12,10 @@ using System.Threading.Tasks;
 
 namespace ParkyAPI.Controllers
 {
-    [Route("api/Trail")]
+    //[Route("api/Trail")]
+    [Route("api/v{version:apiVersion}/trails")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "TrailsAPI")]
+    //[ApiExplorerSettings(GroupName = "TrailsAPI")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class TrailController : Controller
     {
