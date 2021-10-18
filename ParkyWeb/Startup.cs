@@ -9,6 +9,7 @@ using ParkyWeb.Repository.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ParkyWeb
@@ -26,6 +27,7 @@ namespace ParkyWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
             services.AddHttpClient();
             services.AddScoped<INationalParkRepository, NationalParkRepository>();
             services.AddScoped<ITrailRepository, TrailRepository>();
