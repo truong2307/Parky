@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ParkyWeb
@@ -11,4 +12,5 @@ namespace ParkyWeb
         public static string NationalParkAPIPath = APIBaseUrl + "api/v1/nationalparks";
         public static string TrailsAPIPath = APIBaseUrl + "api/v1/trails";
     }
+   
 }

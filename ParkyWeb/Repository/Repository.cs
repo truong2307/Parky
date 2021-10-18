@@ -63,18 +63,8 @@ namespace ParkyWeb.Repository
         public async Task<IEnumerable<T>> GetAllAsync(string url)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, url);
-            //var client = _clientFactory.CreateClient();
-
-            var httpClientHandler = new HttpClientHandler();
-            //bypass SSL Certificate 
-            httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) =>
-            {
-                return true;
-            };
-           
-            //httpclient.baseaddress is used as the starting point to send your http requests.
-            // var client = new HttpClient(httpClientHandler) { BaseAddress = new Uri(url) };
-            var client = new HttpClient(httpClientHandler); //
+            var client = _clientFactory.CreateClient();
+            client = ClientSslBypass();
 
             HttpResponseMessage response = await client.SendAsync(request);
             if (response.StatusCode == HttpStatusCode.OK)
@@ -124,6 +114,21 @@ namespace ParkyWeb.Repository
             {
                 return false;
             }
+        }
+
+        private HttpClient ClientSslBypass()
+        {
+            var httpClientHandler = new HttpClientHandler();
+            //bypass SSL Certificate 
+            httpClientHandler.ServerCertificateCustomValidationCallback 
+                = (message, cert, chain, sslPolicyErrors) =>
+            {
+                return true;
+            };
+
+            //httpclient.baseaddress is used as the starting point to send your http requests.
+            // var client = new HttpClient(httpClientHandler) { BaseAddress = new Uri(url) };
+            return new HttpClient(httpClientHandler); //
         }
     }
 }
