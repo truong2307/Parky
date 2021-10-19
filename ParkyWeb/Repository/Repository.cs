@@ -33,6 +33,7 @@ namespace ParkyWeb.Repository
             }
 
             var client = _clientFactory.CreateClient();
+            client = ClientSslBypass();
             HttpResponseMessage response = await client.SendAsync(request);
             if (response.StatusCode == HttpStatusCode.Created)
             {
@@ -98,7 +99,7 @@ namespace ParkyWeb.Repository
             if (objToCreate !=null)
             {
                 request.Content = new StringContent(
-                    JsonConvert.SerializeObject(objToCreate), Encoding.UTF8, "application.js");
+                    JsonConvert.SerializeObject(objToCreate), Encoding.UTF8, "application/json");
             }
             else
             {
@@ -106,6 +107,7 @@ namespace ParkyWeb.Repository
             }
 
             var client = _clientFactory.CreateClient();
+            client = ClientSslBypass();
             HttpResponseMessage response = await client.SendAsync(request);
             if (response.StatusCode == HttpStatusCode.NoContent)
             {

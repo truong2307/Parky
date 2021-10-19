@@ -63,6 +63,7 @@ namespace ParkyAPI.Repository
             nationalParkInDb.State = nationalPark.State;
             nationalParkInDb.Created = nationalPark.Created;
             nationalParkInDb.Established = nationalPark.Established;
+            nationalParkInDb.Picture = nationalPark.Picture;
 
             return Save();
         }
