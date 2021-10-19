@@ -80,6 +80,7 @@ namespace ParkyWeb.Repository
         {
             var request = new HttpRequestMessage(HttpMethod.Get, url + Id);
             var client = _clientFactory.CreateClient();
+            client = ClientSslBypass();
 
             HttpResponseMessage response = await client.SendAsync(request);
             if (response.StatusCode == HttpStatusCode.OK)
