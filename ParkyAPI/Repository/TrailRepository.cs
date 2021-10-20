@@ -68,6 +68,7 @@ namespace ParkyAPI.Repository
             trailInDb.Distance = trailUpdate.Distance;
             trailInDb.Difficulty = trailUpdate.Difficulty;
             trailInDb.NationalParkId = trailUpdate.NationalParkId;
+            trailInDb.Elevation = trailUpdate.Elevation;
 
             return Save();
         }
