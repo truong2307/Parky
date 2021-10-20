@@ -58,7 +58,7 @@ namespace ParkyAPI.Repository
         public bool UpdateTrail(Trail trailUpdate)
         {
             var trailInDb = _db.Trails.FirstOrDefault(c => c.Id == trailUpdate.Id);
-            var nationalParkInDb = _db.NationalParks.FirstOrDefault(c => c.Id == trailUpdate.Id);
+            var nationalParkInDb = _db.NationalParks.FirstOrDefault(c => c.Id == trailUpdate.NationalParkId);
             if (trailInDb == null || nationalParkInDb == null)
             {
                 return false;

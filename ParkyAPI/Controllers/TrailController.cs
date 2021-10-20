@@ -147,7 +147,7 @@ namespace ParkyAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("trailId")]
+        [HttpDelete("{trailId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -164,6 +164,7 @@ namespace ParkyAPI.Controllers
             {
                 ModelState
                     .AddModelError("", $"Some thing wrong when delete the record {trailInDb.Name}");
+                return StatusCode(500, ModelState);
             }
 
             return NoContent();

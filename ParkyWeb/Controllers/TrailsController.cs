@@ -62,19 +62,19 @@ namespace ParkyWeb.Controllers
         }   
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upsert(Trail trailRequest)
+        public async Task<IActionResult> Upsert(TrailVM trailRequest)
         {
             if (ModelState.IsValid)
             {
-                if (trailRequest.Id == 0)
+                if (trailRequest.Trail.Id == 0)
                 {
                      await _trailRepo
-                        .CreateAsync(SD.TrailsAPIPath, trailRequest);
+                        .CreateAsync(SD.TrailsAPIPath, trailRequest.Trail);
                 }
                 else
                 {
                      await _trailRepo
-                        .UpdateAsync(SD.TrailsAPIPath + trailRequest.Id, trailRequest);
+                        .UpdateAsync(SD.TrailsAPIPath + trailRequest.Trail.Id, trailRequest.Trail);
                 }
                 return RedirectToAction(nameof(Index));
             }
