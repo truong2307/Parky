@@ -43,7 +43,6 @@ namespace ParkyWeb.Controllers
                 };
                 return View(trailViewModel);
             }
-
             else
             {
                 var trailInDb = await _trailRepo.GetAsync(SD.TrailsAPIPath, id.GetValueOrDefault());
@@ -56,7 +55,6 @@ namespace ParkyWeb.Controllers
                         Text = i.Name
                     })
                 };
-
                 return View(trailViewModel);
             }
         }   
@@ -68,8 +66,8 @@ namespace ParkyWeb.Controllers
             {
                 if (trailRequest.Trail.Id == 0)
                 {
-                     await _trailRepo
-                        .CreateAsync(SD.TrailsAPIPath, trailRequest.Trail);
+                    await _trailRepo
+                          .CreateAsync(SD.TrailsAPIPath, trailRequest.Trail);
                 }
                 else
                 {
@@ -78,8 +76,20 @@ namespace ParkyWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(trailRequest);
+            else
+            {
+                var nationalParkInDb = await _npRepo.GetAllAsync(SD.NationalParkAPIPath);
+                var trailViewModel = new TrailVM()
+                {
+                    Trail = trailRequest.Trail,
+                    NationalParkList = nationalParkInDb.Select(i => new SelectListItem()
+                    {
+                        Value = i.Id.ToString(),
+                        Text = i.Name
+                    })
+                };
+                return View(trailViewModel);
+            }
         }
 
         [HttpDelete]
