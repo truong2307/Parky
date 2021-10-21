@@ -45,6 +45,7 @@ namespace ParkyAPI
 
             services.AddScoped<INationalParkRepository, NationalParkRepository>();
             services.AddScoped<ITrailRepository, TrailRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddAutoMapper(typeof(ParkingMappings));
 
             services.AddApiVersioning(options =>
