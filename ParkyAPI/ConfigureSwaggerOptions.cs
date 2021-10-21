@@ -39,7 +39,23 @@ namespace ParkyAPI
                 Type = SecuritySchemeType.ApiKey,
             });
 
-            options.OperationFilter<SecurityRequirementsOperationFilter>();
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        },
+                        Scheme = "oauth2",
+                        Name="Bearer",
+                        In =ParameterLocation.Header,
+                    },
+                    new List<string>()
+                }
+            });
 
             var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
