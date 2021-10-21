@@ -1,11 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using ParkyAPI.Data;
 using ParkyAPI.Models;
 using ParkyAPI.Models.Dtos;
 using ParkyAPI.Repository.IRepository;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,9 +19,11 @@ namespace ParkyAPI.Repository
     public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _db;
-        public UserRepository(ApplicationDbContext db)
+        private readonly IConfiguration _configuration;
+        public UserRepository(ApplicationDbContext db, IConfiguration configuration)
         {
             _db = db;
+            _configuration = configuration;
         }
 
         public async Task<User> Login(string userName, string password)
@@ -31,6 +37,7 @@ namespace ParkyAPI.Repository
 
             if (VerifyPassword(password, userInDb.PasswordHash, userInDb.PasswordSalt))
             {
+                userInDb.Token = CreateToken(userInDb);
                 return userInDb;
             }
 
@@ -96,5 +103,33 @@ namespace ParkyAPI.Repository
                 passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
             }
         }
+
+        private string CreateToken (User user)
+        {
+            var claim = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Role, user.Role)
+            };
+
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+
+            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var tokenDescription = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claim),
+                Expires = DateTime.Now.AddDays(2),
+                SigningCredentials = cred
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescription);
+
+            return tokenHandler.WriteToken(token);
+        }
+
     }
 }
