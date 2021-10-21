@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
@@ -28,11 +29,21 @@ namespace ParkyAPI
                         Title = $"Parky API {desc.ApiVersion}",
                         Version = desc.ApiVersion.ToString()
                     });
-
-                var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
-                options.IncludeXmlComments(cmlCommentsFullPath);
             }
+
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = "Standard Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+            });
+
+            options.OperationFilter<SecurityRequirementsOperationFilter>();
+
+            var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
+            options.IncludeXmlComments(cmlCommentsFullPath);
         }
     }
 }
