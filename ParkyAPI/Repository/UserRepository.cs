@@ -48,9 +48,17 @@ namespace ParkyAPI.Repository
             user.PasswordHash = PasswordHash;
             user.PasswordSalt = PasswordSalt;
 
-            await _db.Users.AddAsync(user);
+            if (!await _db.Users.AnyAsync(c => c.Role == "Admin"))
+            {
+                user.Role = "Admin";
+                await _db.Users.AddAsync(user);
+            }
+            else
+            {
+                user.Role = "User";
+                await _db.Users.AddAsync(user);
+            }
             await _db.SaveChangesAsync();
-
             return user;
         }
 

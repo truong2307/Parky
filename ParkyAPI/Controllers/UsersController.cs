@@ -48,6 +48,5 @@ namespace ParkyAPI.Controllers
 
             return Ok();
         }
-
     }
 }
