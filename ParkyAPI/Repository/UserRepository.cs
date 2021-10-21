@@ -22,7 +22,19 @@ namespace ParkyAPI.Repository
 
         public async Task<User> Login(string userName, string password)
         {
-            throw new NotImplementedException();
+            if (!await UserExists(userName))
+            {
+                return null;
+            }
+
+            var userInDb = await _db.Users.FirstOrDefaultAsync(c => c.UserName.ToLower() == userName.ToLower());
+
+            if (VerifyPassword(password, userInDb.PasswordHash, userInDb.PasswordSalt))
+            {
+                return userInDb;
+            }
+
+            return null;
         }
 
         public async Task<User> Register(User user, string password)
@@ -50,6 +62,22 @@ namespace ParkyAPI.Repository
                 return false;
             }
             return true;
+        }
+
+        private bool VerifyPassword (string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using(var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computerHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+                for (int i = 0; i < passwordHash.Length; i++)
+                {
+                    if (computerHash[i] != passwordHash[i])
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
