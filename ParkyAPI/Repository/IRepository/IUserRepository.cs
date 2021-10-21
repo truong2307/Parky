@@ -10,7 +10,7 @@ namespace ParkyAPI.Repository.IRepository
     public interface IUserRepository
     {
         Task<bool> UserExists(string userName);
-        Task<UserDto> Login(string userName, string password);
-        Task<UserDto> Register(User user, string password);
+        Task<User> Login(string userName, string password);
+        Task<User> Register(User user, string password);
     }
 }
