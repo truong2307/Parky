@@ -29,7 +29,8 @@ namespace ParkyWeb.Controllers
 
         public async Task<IActionResult> Upsert(int? id)
         {
-            var nationalParkInDb = await _npRepo.GetAllAsync(SD.NationalParkAPIPath, HttpContext.Session.GetString("JWTToken"));
+            var nationalParkInDb = await _npRepo
+                .GetAllAsync(SD.NationalParkAPIPath, HttpContext.Session.GetString("JWTToken"));
 
             if (id == null)
             {
@@ -46,7 +47,9 @@ namespace ParkyWeb.Controllers
             }
             else
             {
-                var trailInDb = await _trailRepo.GetAsync(SD.TrailsAPIPath, id.GetValueOrDefault(), HttpContext.Session.GetString("JWTToken"));
+                var trailInDb = await _trailRepo
+                    .GetAsync(SD.TrailsAPIPath
+                    , id.GetValueOrDefault(), HttpContext.Session.GetString("JWTToken"));
                 if (trailInDb == null)
                 {
                     return NotFound();
@@ -65,7 +68,8 @@ namespace ParkyWeb.Controllers
                     return View(trailViewModel);
                 }
             }
-        }   
+        }  
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Upsert(TrailVM trailRequest)
@@ -75,18 +79,21 @@ namespace ParkyWeb.Controllers
                 if (trailRequest.Trail.Id == 0)
                 {
                     await _trailRepo
-                          .CreateAsync(SD.TrailsAPIPath, trailRequest.Trail, HttpContext.Session.GetString("JWTToken"));
+                          .CreateAsync(SD.TrailsAPIPath
+                          , trailRequest.Trail, HttpContext.Session.GetString("JWTToken"));
                 }
                 else
                 {
                      await _trailRepo
-                        .UpdateAsync(SD.TrailsAPIPath + trailRequest.Trail.Id, trailRequest.Trail, HttpContext.Session.GetString("JWTToken"));
+                        .UpdateAsync(SD.TrailsAPIPath + trailRequest.Trail.Id
+                        , trailRequest.Trail, HttpContext.Session.GetString("JWTToken"));
                 }
                 return RedirectToAction(nameof(Index));
             }
             else
             {
-                var nationalParkInDb = await _npRepo.GetAllAsync(SD.NationalParkAPIPath, HttpContext.Session.GetString("JWTToken"));
+                var nationalParkInDb = await _npRepo.GetAllAsync(SD.NationalParkAPIPath
+                    , HttpContext.Session.GetString("JWTToken"));
                 var trailViewModel = new TrailVM()
                 {
                     Trail = trailRequest.Trail,
@@ -103,7 +110,8 @@ namespace ParkyWeb.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteTrail (int id)
         {
-            var trailIsDelete = await _trailRepo.DeleteAsync(SD.TrailsAPIPath, id, HttpContext.Session.GetString("JWTToken"));
+            var trailIsDelete = await _trailRepo.DeleteAsync(SD.TrailsAPIPath, id
+                , HttpContext.Session.GetString("JWTToken"));
 
             if (!trailIsDelete)
             {
@@ -116,7 +124,8 @@ namespace ParkyWeb.Controllers
         public async Task<IActionResult> GetAllTrails()
         {
             return Json(
-                new { data = await _trailRepo.GetAllAsync(SD.TrailsAPIPath, HttpContext.Session.GetString("JWTToken")) });
+                new { data = await _trailRepo.GetAllAsync(SD.TrailsAPIPath
+                , HttpContext.Session.GetString("JWTToken")) });
         }
     }
 }

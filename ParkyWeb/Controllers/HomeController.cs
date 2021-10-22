@@ -34,8 +34,10 @@ namespace ParkyWeb.Controllers
         {
             var nationalParkAndTrailVM = new NationalParkAndTrailVM()
             {
-                TrailList = await _trailRepo.GetAllAsync(SD.TrailsAPIPath, HttpContext.Session.GetString("JWTToken")),
-                NationalParkList = await _npRepo.GetAllAsync(SD.NationalParkAPIPath, HttpContext.Session.GetString("JWTToken"))
+                TrailList = await _trailRepo
+                    .GetAllAsync(SD.TrailsAPIPath, HttpContext.Session.GetString("JWTToken")),
+                NationalParkList = await _npRepo
+                    .GetAllAsync(SD.NationalParkAPIPath, HttpContext.Session.GetString("JWTToken"))
             };
             return View(nationalParkAndTrailVM);
         }

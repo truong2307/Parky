@@ -29,7 +29,8 @@ namespace ParkyWeb.Controllers
                 return View(nationalPark);
             }
 
-            nationalPark = await _npRepo.GetAsync(SD.NationalParkAPIPath, id.GetValueOrDefault(), HttpContext.Session.GetString("JWTToken"));
+            nationalPark = await _npRepo.GetAsync(SD.NationalParkAPIPath
+                , id.GetValueOrDefault(), HttpContext.Session.GetString("JWTToken"));
             if (nationalPark == null)
             {
                 return NotFound();
@@ -61,18 +62,21 @@ namespace ParkyWeb.Controllers
                 else
                 {
                     var nationalParkInDb = await _npRepo
-                        .GetAsync(SD.NationalParkAPIPath, nationalParkRequest.Id, HttpContext.Session.GetString("JWTToken"));
+                        .GetAsync(SD.NationalParkAPIPath
+                            , nationalParkRequest.Id, HttpContext.Session.GetString("JWTToken"));
                     nationalParkRequest.Picture = nationalParkInDb.Picture;
                 }
                 if (nationalParkRequest.Id ==0)
                 {
                     await _npRepo
-                        .CreateAsync(SD.NationalParkAPIPath, nationalParkRequest, HttpContext.Session.GetString("JWTToken"));
+                        .CreateAsync(SD.NationalParkAPIPath
+                            , nationalParkRequest, HttpContext.Session.GetString("JWTToken"));
                 }
                 else
                 {
                     await _npRepo
-                        .UpdateAsync(SD.NationalParkAPIPath+nationalParkRequest.Id, nationalParkRequest, HttpContext.Session.GetString("JWTToken"));
+                        .UpdateAsync(SD.NationalParkAPIPath+nationalParkRequest.Id
+                            , nationalParkRequest, HttpContext.Session.GetString("JWTToken"));
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -87,14 +91,16 @@ namespace ParkyWeb.Controllers
         public async Task<IActionResult> GetAllNationalPark()
         {
             return Json(new {
-                data = await _npRepo.GetAllAsync(SD.NationalParkAPIPath, HttpContext.Session.GetString("JWTToken"))
+                data = await _npRepo.GetAllAsync(SD.NationalParkAPIPath
+                    , HttpContext.Session.GetString("JWTToken"))
             });
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteNationalPark(int id)
         {
-            bool nationalParkIsDelete = await _npRepo.DeleteAsync(SD.NationalParkAPIPath, id, HttpContext.Session.GetString("JWTToken"));
+            bool nationalParkIsDelete = await _npRepo.DeleteAsync(SD.NationalParkAPIPath
+                , id, HttpContext.Session.GetString("JWTToken"));
 
             if (!nationalParkIsDelete)
             {
