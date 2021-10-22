@@ -15,7 +15,6 @@ namespace ParkyAPI.Controllers
     [Route("api/v{version:apiVersion}/nationalparks")]
     //[Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
     //[ApiExplorerSettings(GroupName = "NationalParkAPI")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class NationalParksController : ControllerBase
@@ -34,7 +33,6 @@ namespace ParkyAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(List<NationalParkDto>))]
         public IActionResult GetNationalParks()
         {

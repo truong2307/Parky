@@ -16,7 +16,6 @@ namespace ParkyAPI.Controllers
     //[Route("api/Trail")]
     [Route("api/v{version:apiVersion}/trails")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
     //[ApiExplorerSettings(GroupName = "TrailsAPI")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class TrailController : ControllerBase
@@ -33,7 +32,6 @@ namespace ParkyAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<TrailDto>))]
         public IActionResult GetTrails()
         {
