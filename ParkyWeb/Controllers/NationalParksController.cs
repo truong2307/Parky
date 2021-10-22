@@ -85,7 +85,6 @@ namespace ParkyWeb.Controllers
             {
                 return View(nationalParkRequest);
             }
-            
         }
 
         public async Task<IActionResult> GetAllNationalPark()
