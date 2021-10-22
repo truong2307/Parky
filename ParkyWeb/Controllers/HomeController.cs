@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ParkyWeb.Models;
@@ -8,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ParkyWeb.Controllers
@@ -68,6 +71,13 @@ namespace ParkyWeb.Controllers
 
             if (userResponse != null)
             {
+                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                identity.AddClaim(new Claim(ClaimTypes.Name, userResponse.UserName));
+                identity.AddClaim(new Claim(ClaimTypes.Role, userResponse.Role));
+
+                var principal = new ClaimsPrincipal(identity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
                 HttpContext.Session.SetString("JWTToken", userResponse.Token);
                 return RedirectToAction(nameof(Index));
             }
@@ -95,10 +105,16 @@ namespace ParkyWeb.Controllers
             return View();
         }
 
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
+            await HttpContext.SignOutAsync();
             HttpContext.Session.SetString("JWTToken", "");
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }
