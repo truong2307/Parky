@@ -74,9 +74,11 @@ namespace ParkyWeb.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                 HttpContext.Session.SetString("JWTToken", userResponse.Token);
+                TempData["alert"] = "Welcome " + userResponse.UserName;
+
                 return RedirectToAction(nameof(Index));
             }
-
+            TempData["alert"] = "Incorrect username or password ";
             return View();
         }
 
@@ -103,6 +105,8 @@ namespace ParkyWeb.Controllers
                         .SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                     HttpContext.Session.SetString("JWTToken", loginNewUser.Token);
+                    TempData["alert"] = "Register success, welcome " + loginNewUser.UserName;
+
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -110,7 +114,7 @@ namespace ParkyWeb.Controllers
                     return NotFound();
                 }
             }
-
+            TempData["alert"] = "Register fail, Maybe username already exists, try another username ";
             return View();
         }
 
