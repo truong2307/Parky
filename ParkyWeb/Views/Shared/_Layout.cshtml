@@ -31,7 +31,7 @@
                         @*<li class="nav-item">
               <a class="nav-link text-white-50" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </li>*@
-                        @if (User.IsInRole("Admin") || User.IsInRole("User"))
+                        @if (User.IsInRole("Admin") && HttpAccessor.HttpContext.Session.GetString("JWTToken") != null)
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-white-50" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -44,7 +44,7 @@
                             </li>
                         }
                         @if (HttpAccessor.HttpContext.Session.GetString("JWTToken") != null &&
-                       HttpAccessor.HttpContext.Session.GetString("JWTToken").ToString().Length > 0)
+                      HttpAccessor.HttpContext.Session.GetString("JWTToken").ToString().Length > 0)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-white-50" asp-controller="Home" asp-action="Logout">Logout</a>

@@ -104,7 +104,6 @@ namespace ParkyWeb.Controllers
 
                     HttpContext.Session.SetString("JWTToken", loginNewUser.Token);
                     return RedirectToAction(nameof(Index));
-
                 }
                 else
                 {
