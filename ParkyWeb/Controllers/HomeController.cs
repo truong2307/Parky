@@ -56,7 +56,6 @@ namespace ParkyWeb.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-
         public IActionResult Login()
         {
             var user = new UserRequest();
@@ -71,11 +70,7 @@ namespace ParkyWeb.Controllers
 
             if (userResponse != null)
             {
-                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-                identity.AddClaim(new Claim(ClaimTypes.Name, userResponse.UserName));
-                identity.AddClaim(new Claim(ClaimTypes.Role, userResponse.Role));
-
-                var principal = new ClaimsPrincipal(identity);
+                var principal = ClaimsPrincipal(userResponse);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                 HttpContext.Session.SetString("JWTToken", userResponse.Token);
@@ -99,7 +94,22 @@ namespace ParkyWeb.Controllers
 
             if (userRegisterSuccess)
             {
-                return RedirectToAction(nameof(Login));
+                var loginNewUser = await _userRepo.Login(SD.UserAPIPath + "login/", userRequest);
+                if (loginNewUser!= null)
+                {
+                    var principal = ClaimsPrincipal(loginNewUser);
+
+                    await HttpContext
+                        .SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                    HttpContext.Session.SetString("JWTToken", loginNewUser.Token);
+                    return RedirectToAction(nameof(Index));
+
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
 
             return View();
@@ -115,6 +125,15 @@ namespace ParkyWeb.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        private ClaimsPrincipal ClaimsPrincipal(User user)
+        {
+            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+            identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+            identity.AddClaim(new Claim(ClaimTypes.Role, user.Role));
+
+            return new ClaimsPrincipal(identity);
         }
     }
 }
