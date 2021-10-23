@@ -80,9 +80,27 @@ namespace ParkyWeb.Controllers
             {
                 if (trailRequest.Trail.Id == 0)
                 {
-                    await _trailRepo
+                    var trailCreateSucess = await _trailRepo
                           .CreateAsync(SD.TrailsAPIPath
                           , trailRequest.Trail, HttpContext.Session.GetString("JWTToken"));
+                    if (!trailCreateSucess)
+                    {
+                        TempData["alert"] = trailRequest.Trail.Name
+                            + " This name is already exists, try another name";
+
+                        var nationalParkInDb = await _npRepo.GetAllAsync(SD.NationalParkAPIPath
+                    , HttpContext.Session.GetString("JWTToken"));
+                        var trailViewModel = new TrailVM()
+                        {
+                            Trail = trailRequest.Trail,
+                            NationalParkList = nationalParkInDb.Select(i => new SelectListItem()
+                            {
+                                Value = i.Id.ToString(),
+                                Text = i.Name
+                            })
+                        };
+                        return View(trailViewModel);
+                    }
                 }
                 else
                 {

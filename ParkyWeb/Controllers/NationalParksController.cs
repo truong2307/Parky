@@ -70,9 +70,15 @@ namespace ParkyWeb.Controllers
                 }
                 if (nationalParkRequest.Id ==0)
                 {
-                    await _npRepo
+                    var CreateSuccess= await _npRepo
                         .CreateAsync(SD.NationalParkAPIPath
                             , nationalParkRequest, HttpContext.Session.GetString("JWTToken"));
+                    if (!CreateSuccess)
+                    {
+                        TempData["alert"] = nationalParkRequest.Name 
+                            + "This name is already exists, try another name";
+                        return View(nationalParkRequest);
+                    }
                 }
                 else
                 {
