@@ -18,3 +18,7 @@ ParkyWeb with ASP.NET Core MVC
 - Save image as byte array, and display image with base64
 - Passing JWT token to API
 - Cookie authentication
+
+admin account:
+admin2
+123123
